@@ -1,9 +1,22 @@
-## About me 👋
+# Infoagro | Documentação (BigQuery + Looker Studio)
 
+Este repositório documenta os **conjuntos de dados no BigQuery** e os **painéis no Looker Studio** do projeto Infoagro.
 
-**rpezzino/rpezzino** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+## Visão rápida
+- **BigQuery**
+  - Projeto: `infoagro`
+  - Dataset: `infoagro`
+- **Atualização**: automática (configuração exibida no Looker Studio: **12 horas**)
 
-Here are some ideas to get you started:
+## Conteúdo
+- 📦 [Documentação dos Conjuntos de Dados](docs/conjuntos_dados.md)
+- 📊 [Documentação dos Painéis (Funcional + Técnica)](docs/paineis.md)
 
-- 🔭 I’m currently working on ALERJ
-- 👯 I’m looking to collaborate on projects of data science
+## Painéis
+- ✅ Histórico de Clima (INMET)
+- ✅ Produtividade Agrícola
+- 🟡 Análise de Solos (em construção)
+
+## Pastas
+- `docs/` documentação em Markdown
+- `docs/img/` prints dos painéis (para evidenciar layout e validar requisitos)
