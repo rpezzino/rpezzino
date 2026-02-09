@@ -5,7 +5,7 @@
 
 - Projeto: `infoagro`
 - Dataset: `infoagro`
-- Regra do jogo: cada painel consome tabelas do mesmo “repositório” (mesmo projeto/dataset).
+- Cada painel consome tabelas do mesmo “repositório” (mesmo projeto/dataset).
 
 ---
 
@@ -19,12 +19,12 @@
 Base histórica de clima do INMET por **estação**, com registros em granularidade **horária**, incluindo localização (lat/long) e variáveis meteorológicas (precipitação, temperatura, pressão, umidade e vento).
 
 ## 1.3 Granularidade (grão do registro)
-- **Temporal**: `data` + `hora` (horária)
-- **Espacial**: estação (com latitude/longitude); recortes por UF e região
-- **Unidade de registro** (conceitual): 1 linha ≈ 1 leitura em 1 estação em 1 hora
+- **Temporal**: campos calculados de mês e de ano a partir das informações de `data`
+- **Espacial**: estação (`estacao`); recortes por UF e região (`regiaoceperj`)
+- **Unidade de registro** (conceitual): 1 linha ≈ 1 leitura em 1 estação em 1 data (mês e ano)
 
 ## 1.4 Campos (dicionário de dados)
-> Tipos conforme Looker Studio / BigQuery (visão prática).  
+> Tipos conforme Looker Studio / BigQuery.  
 > “Agregação recomendada” é a forma correta de agregar em gráficos/KPIs.
 
 ### Identificação e geografia
@@ -44,8 +44,8 @@ Base histórica de clima do INMET por **estação**, com registros em granularid
 |---|---|---:|---|
 | `data` | Data | Nenhum | Data da leitura |
 | `hora` | Texto | Nenhum | Hora da leitura |
-| `ano` | Ano (AAAA) | Nenhum | Campo derivado para filtro/agrupamento |
-| `mês` | Mês (MM) | Nenhum | Campo derivado para filtro/agrupamento |
+| `ano` | Número | Nenhum | Campo derivado para filtro/agrupamento |
+| `mês` | Texto | Nenhum | Campo derivado para filtro/agrupamento |
 
 ### Variáveis meteorológicas (principais)
 | Campo | Tipo | Agregação recomendada | Descrição |
@@ -65,10 +65,9 @@ Base histórica de clima do INMET por **estação**, com registros em granularid
 | `vento_dir_horaria_gr` | Número | Nenhum | Direção do vento (graus). (Evitar média simples; usar apenas para leitura/tooltip) |
 | `radiacao_global_kj_m2` | Número | **Média** | Radiação global (agregar conforme uso) |
 
-> Observação: existem campos adicionais de “orvalho”, “bulbo”, etc. Se estiverem nos gráficos, documente também neste mesmo padrão.
 
 ## 1.5 Atualização
-- Atualização automática: **12 horas** (conforme conexão exibida no Looker Studio)
+- Atualização automática: **12 horas**
 
 ## 1.6 Limitações (qualidade e cobertura)
 - Pode existir **ausência de dados por estação/período**
@@ -80,16 +79,16 @@ Base histórica de clima do INMET por **estação**, com registros em granularid
 # 2) Conjunto de Dados: Produtividade_Rural_Municípios_RJ
 
 ## 2.1 Identificação
-- **Tabela (BigQuery)**: `infoagro.infoagro.produtividade_rural_municipios_rj_2021_20...`
-- **Fonte (Looker Studio)**: `produtividade_rural_municipios_rj_20...`
+- **Tabela (BigQuery)**: `infoagro.infoagro.produtividade_rural_municipios_rj_2021_2024`
+- **Fonte (Looker Studio)**: `produtividade_rural_municipios_rj_2024`
 
 ## 2.2 Descrição
 Base anual de indicadores de produção e produtividade agrícola no RJ, por **região, município e cultura**, com métricas de área colhida, produção, produtores, preço e faturamento.
 
 ## 2.3 Granularidade (grão do registro)
 - **Temporal**: anual (`ano`)
-- **Espacial**: município + região
-- **Dimensão**: cultura
+- **Espacial**: município (`municipio`) + região (`regiao`)
+- **Dimensão**: cultura (`cultura`)
 - **Unidade de registro**: 1 linha ≈ 1 cultura em 1 município em 1 ano
 
 ## 2.4 Campos (dicionário de dados)
@@ -112,11 +111,7 @@ Base anual de indicadores de produção e produtividade agrícola no RJ, por **r
 ## 2.5 Atualização
 - Atualização automática: **12 horas**
 
-## 2.6 Regras oficiais (para não sair KPI mentiroso)
-- **Produtividade calculada (t/ha)** = `SUM(producao_colhida_t) / SUM(area_colhida_ha)`
-- **Preço médio (R$/kg)** = `SUM(faturamento_bruto) / (SUM(producao_colhida_t) * 1000)`
-
-## 2.7 Limitações
+## 2.6 Limitações
 - `preco_kg` e `produtividade_t_ha` não devem ser agregados por soma
 - risco de duplicidade em `produtores` dependendo do grão
 
@@ -129,7 +124,7 @@ Base anual de indicadores de produção e produtividade agrícola no RJ, por **r
 - **Fonte (Looker Studio)**: `rj_municipios`
 
 ## 3.2 Descrição
-Tabela geoespacial com polígonos dos municípios do RJ (`geometry`) e chaves para relacionamento com fatos (produção/clima/solos).
+Tabela geoespacial com polígonos dos municípios do RJ (`geometry`) e chaves para relacionamento com fatos (produção agrícola).
 
 ## 3.3 Granularidade
 - **Espacial**: município (1 linha por município)
@@ -156,7 +151,7 @@ Tabela geoespacial com polígonos dos municípios do RJ (`geometry`) e chaves pa
 
 ---
 
-# 4) Conjunto de Dados: Solos_RJ (staging, em construção)
+# 4) Conjunto de Dados: Solos_RJ (em construção)
 
 ## 4.1 Identificação
 Todas as tabelas abaixo estão em:
