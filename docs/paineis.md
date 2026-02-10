@@ -41,7 +41,7 @@ Gestores, analistas e usuários que precisam consultar padrões de clima (chuva,
 - Tabela de estações + municípios mais próximos
 - Mapa com pontos das estações
 
-### Regras de uso (para evitar interpretação errada)
+### Regras de uso
 - Chuva: analisar por **soma** no período
 - Temperatura/pressão/umidade/vento: usar **média** no período
 
@@ -66,12 +66,11 @@ Gestores, analistas e usuários que precisam consultar padrões de clima (chuva,
 - automática: 12 horas
 
 ### Performance (prático)
-- Evitar filtros muito “abertos” com série horária longa (muitos anos sem recorte)
+- Evitar filtros muito “abertos” com séries longas (muitos anos sem recorte)
 - Recomenda-se padrão de filtro inicial (ex.: ano atual) para reduzir carga
 
 ### Riscos / limitações técnicas
 - Lacunas por estação/período
-- Direção do vento não deve ser média simples (usar apenas como informação de apoio)
 
 ---
 
@@ -100,7 +99,7 @@ Gestores/analistas do projeto Infoagro e usuários que consultam desempenho agr�
 - Ano
 - Região
 - Município
-- Cultura (em páginas específicas)
+- Culturas (em páginas específicas)
 
 ### KPIs (outputs)
 - Área colhida (ha)
@@ -125,8 +124,8 @@ Gestores/analistas do projeto Infoagro e usuários que consultam desempenho agr�
 
 ## 2.2 Documentação Técnica
 ### Fontes e tabelas
-- Fato: `produtividade_rural_municipios_rj_2021_20...`
-  - BigQuery: `infoagro.infoagro.produtividade_rural_municipios_rj_2021_20...`
+- Fato: `produtividade_rural_municipios_rj_2021_2024`
+  - BigQuery: `infoagro.infoagro.produtividade_rural_municipios_rj_2021_2024`
 - Geo: `rj_municipios`
   - BigQuery: `infoagro.infoagro.rj_municipios`
 
@@ -134,14 +133,14 @@ Gestores/analistas do projeto Infoagro e usuários que consultam desempenho agr�
 - Recomendado: `codigo_ibge` (quando disponível)
 - Alternativa: `municipio_uf` padronizado
 
-### Regras oficiais (campos calculados recomendados no Data Source)
+### Regras sugeridas (possibilidade de usar campos calculados no Data Source)
 **1) Produtividade calculada (t/ha)**
 - `produtividade_calc_t_ha = SUM(producao_colhida_t) / SUM(area_colhida_ha)`
 
 **2) Preço médio calculado (R$/kg)**
 - `preco_medio_rs_kg = SUM(faturamento_bruto) / (SUM(producao_colhida_t) * 1000)`
 
-> Se você usar `produtividade_t_ha` e `preco_kg` direto, o Looker pode aplicar “Soma” e quebrar KPI.
+> Foi usado `produtividade_t_ha` e `preco_kg` direto, mas observando se o Looker utiliza “Soma” com quebra de KPI.
 
 ### Atualização
 - automática: 12 horas
